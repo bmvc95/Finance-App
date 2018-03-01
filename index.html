@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<html>
+  <head>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <style> body {padding: 0; margin: 0;} </style>
+    <script src="libraries/p5.js"></script>
+    <script src="libraries/p5.dom.js"></script>
+    <script src="libraries/p5.sound.js"></script>
+    <script src="jsFiles/asset.js"></script>
+    <script src="jsFiles/cash.js"></script>
+    <script src="jsFiles/savings.js"></script>
+    <script src="jsFiles/expenses.js"></script>
+    <script src="jsFiles/return.js"></script>
+    <script src="jsFiles/checking.js"></script>
+    <script src="jsFiles/otherasset.js"></script>
+    <script src="jsFiles/utilities.js"></script>
+    <script src="jsFiles/rentmortgage.js"></script>
+    <script src="jsFiles/carbill.js"></script>
+    <script src="jsFiles/owedcredit.js"></script>
+    <style>
+	canvas {
+		display: block;
+		position: absolute;
+		margin: auto;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	</style>
+  </head>
+  <body>
+  </body>
+</html>
+<script>
+var loadingBG;
+var loadingTime = 60;
+
+var homeScreen = true;
+var assetScreen = false;
+var expenseScreen = false;
+var titleImage;
+var bg1;
+var bg2;
+var expenseImage;
+var assetImage;
+var assetLoad;
+var expenseLoad;
+var returnHome;
+var goBack;
+var cashImage;
+var cashPrompt;
+var cashLoad;
+var checkingLoad;
+var checkingImage;
+var checkingPrompt;
+var savingsLoad;
+var savingsImage;
+var savingsPrompt;
+var otherAssetsLoad;
+var othersImage1;
+var otherAssetsPrompt;
+
+var utilitiesLoad;
+var utilitiesImage;
+var utilitiesPrompt;
+
+var rent_mortgageLoad;
+var rent_mortgageImage;
+var rent_mortgagePrompt;
+
+var carBillLoad;
+var carBillImage;
+var carBillPrompt;
+
+var owedCreditLoad;
+var owedCreditImage;
+var owedCreditPrompt;
+
+
+var netWorthLabel;
+var totalExpense;
+var totalAssets;
+
+var netWorth;
+var asset1 = 0;
+var asset2 = 0;
+var asset3 = 0;
+var asset4 = 0;
+var expense1 = 0
+var expense2 = 0
+var expense3 = 0
+var expense4 = 0
+totalAssets = asset1+asset2+asset3+asset4;
+totalExpense = expense1+expense2+expense3+expense4;
+netWorth = (totalAssets - totalExpense) / 1000;
+function setup() {
+
+createCanvas(window.innerWidth, window.innerHeight);
+// Store
+
+loadingBG = loadImage("cleaverappsBG.png");  // Load the image
+titleImage = loadImage("title1.png");
+expenseImage = loadImage("expenses.png");
+bg1 = loadImage("bg.png");
+bg2 = loadImage("bg.png");
+assetImage = loadImage("assets.png");
+returnHome = loadImage("return.png");
+cashImage = loadImage("cash.png");
+checkingImage = loadImage("checkings.png");
+savingsImage = loadImage("savings.png");
+othersImage1 = loadImage("other.png");
+utilitiesImage = loadImage("utilities.png");
+rent_mortgageImage = loadImage("rent_mortgage.png");
+carBillImage = loadImage("carbills.png");
+owedCreditImage = loadImage("owedcredit.png");
+expenseLoad = new Expenses();
+assetLoad = new Asset();
+cashLoad = new Cash();
+goBack = new goHome();
+checkingLoad = new Checking();
+savingsLoad = new Savings();
+otherAssetsLoad = new otherAssets();
+utilitiesLoad = new Utilities();
+rent_mortgageLoad = new rentMortgage();
+carBillLoad = new carBill();
+owedCreditLoad = new owedCredit();
+
+}
+
+function draw() {
+
+//THIS LOADS THE BACKGROUND
+if (loadingTime > 0) {
+image(loadingBG, 0, 0, width, height);
+loadingTime--;
+
+}else if (homeScreen == true) {
+background(51);
+image(titleImage, (width/2)-374, 20,748,250);
+image(expenseImage, (width/2)-374, 600,748,250);
+image(bg1, -200, 275, 2000,25);
+image(assetImage, (width/2)-374, 350,748,250);
+image(bg2, width/2-425, height/2 +100, 850,800);
+
+if (netWorth == 0) {
+  textSize(75);
+  fill('#000000');
+  textStyle(BOLD);
+  textAlign(CENTER);
+  text('CLICK THE', width/2, height/2+350);
+  text('ASSET & EXPENSE', width/2, height/2+420);
+  text('BUTTONS TO', width/2, height/2+490);
+  text('CALCULATE', width/2, height/2+560);
+  text('YOUR NET WORTH', width/2, height/2+630);
+}
+ if (netWorth < 0 || netWorth > 0) {
+
+  textSize(100);
+  fill('#000000');
+  textStyle(BOLD);
+  textAlign(CENTER);
+  text('YOUR NET', width/2, height/2+350);
+  text('WORTH IS', width/2, height/2+450);
+  text(netWorth.toFixed(2), width/2, height/2+550);
+}
+
+}else if (assetScreen == true) {
+background(51);
+image(bg1, -200, 275, 2000,25);
+image(assetImage, (width/2)-374, 20,748,250);
+image(returnHome, (width/2)-374, height-250,748,250);
+image(cashImage, (width/4)-187, 350,374,125);
+image(checkingImage, width-426, 350,374,125);
+image(savingsImage, (width/4)-187, 550,374,125);
+image(othersImage1, width-426, 550,374,125);
+
+if (cashPrompt != null || asset1 > 0) {
+    textSize(50);
+    fill(255);
+    textStyle(BOLD);
+    textAlign(CENTER);
+    text(asset1 + "$", (width/4)-100, 475, 100, 500);
+}
+if (checkingPrompt != null || asset2 > 0) {
+    textSize(50);
+    fill(255);
+    text(asset2 + "$", (width/2)+150, 475, 100, 500); // Text wraps within text box    }
+}
+if (savingsPrompt != null || asset3 > 0) {
+    textSize(50);
+    fill(255);
+    text(asset3 + "$", (width/4)-100, 675, 100, 700); // Text wraps within text box    }
+}
+if (otherAssetsPrompt != null || asset4 > 0) {
+    textSize(50);
+    fill(255);
+    text(asset4 + "$", (width/2)+150, 675, 100, 500); // Text wraps within text box    }
+}
+}
+else if (expenseScreen == true) {
+  background(51);
+  image(bg2, -200, 275, 2000,25);
+  image(expenseImage, (width/2)-374, 20,748,250);
+  image(returnHome, (width/2)-374, height-250,748,250);
+  image(utilitiesImage, (width/4)-187, 350,374,125);
+  image(rent_mortgageImage, width-426, 350,374,125);
+  image(carBillImage, (width/4)-187, 550,374,125);
+  image(owedCreditImage, width-426, 550,374,125);
+
+
+if (utilitiesPrompt || expense1 > 0) {
+    textSize(50);
+    fill(255);
+    text(expense1 + "$", (width/4)-100, 475, 100, 500); // Text wraps within text box    }
+}
+if (rent_mortgagePrompt || expense2 > 0){
+    textSize(50);
+    fill(255);
+    text(expense2 + "$", (width/2)+150, 475, 100, 500); // Text wraps within text box    }
+}
+if (carBillPrompt || expense3 > 0){
+    textSize(50);
+    fill(255);
+    text(expense3 + "$", (width/4)-100, 675, 100, 700); // Text wraps within text box    }
+}
+if (owedCreditPrompt != null || expense4 > 0) {
+    textSize(50);
+    fill(255);
+    text(expense4 + "$", (width/2)+150, 675, 100, 500); // Text wraps within text box    }
+}
+}
+
+}
+mousePressed = function() {
+if (assetLoad.isClicked(mouseX, mouseY) && homeScreen == true) {
+      homeScreen = false;
+      assetScreen = true;
+
+    } else if (goBack.isClicked(mouseX, mouseY) && homeScreen == false) {
+      homeScreen = true;
+      assetScreen = false;
+      expenseScreen = false;
+totalAssets=asset1+asset2+asset3+asset4;
+totalExpense=expense1+expense2+expense4+expense3;
+netWorth = totalAssets-totalExpense;
+
+
+    }
+    else if (expenseLoad.isClicked(mouseX, mouseY) && homeScreen == true) {
+      homeScreen = false;
+      expenseScreen = true;
+    }
+    else if (cashLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == false) {
+      //cashPrompt = prompt("Please enter your cash amount", "0");
+    cashPrompt = prompt("Please enter your cash amount", "0");
+      asset1 = parseFloat(cashPrompt);
+
+}else if (checkingLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == false) {
+  checkingPrompt = prompt("Please enter your checkings amount", "0");
+  asset2 = parseFloat(checkingPrompt);
+}
+else if (savingsLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == false) {
+  savingsPrompt = prompt("Please enter your savings amount", "0");
+  asset3 = parseFloat(savingsPrompt);
+}
+else if (otherAssetsLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == false) {
+  otherAssetsPrompt = prompt("Please enter other assets", "0");
+  asset4 = parseFloat(otherAssetsPrompt);
+}
+else if (utilitiesLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == true) {
+  utilitiesPrompt = prompt("If any, please enter utilities", "0");
+  expense1 = parseFloat(utilitiesPrompt);
+}
+else if (rent_mortgageLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == true) {
+  rent_mortgagePrompt = prompt("If any, please enter your rent or mortgage", "0");
+  expense2 = parseFloat(rent_mortgagePrompt);
+
+}
+else if (carBillLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == true) {
+  carBillPrompt = prompt("If any, please enter your car expenses", "0");
+  expense3 = parseFloat(carBillPrompt);
+
+}
+else if (owedCreditLoad.isClicked(mouseX, mouseY) && homeScreen == false && expenseScreen == true) {
+  owedCreditPrompt = prompt("If any, please enter any credit you owe", "0");
+  expense4 = parseFloat(owedCreditPrompt);
+
+}
+return asset1, asset2, asset3, asset4;
+}
+
+
+
+
+</script>
